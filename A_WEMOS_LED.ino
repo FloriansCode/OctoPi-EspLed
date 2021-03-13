@@ -56,8 +56,13 @@ void setup() {
 void loop() {
 
           API_JOB_CHECK(); 
-          
-WiFiClient client = server.available();   // Auf Clients (Server-Aufrufe) warten
+          WEBSITE();
+ 
+}
+
+//User Website
+void WEBSITE(){
+  WiFiClient client = server.available();   // Auf Clients (Server-Aufrufe) warten
   if (client) {                             // Bei einem Aufruf des Servers
           client.println("HTTP/1.1 200 OK");
           client.println("Content-type:text/html");
@@ -79,11 +84,7 @@ WiFiClient client = server.available();   // Auf Clients (Server-Aufrufe) warten
                 client.println(led_calc);    
           client.stop();
   }
-
-
-      
 }
-
 
 //http request to get Job Information
 void API_JOB_CHECK (){
@@ -124,6 +125,15 @@ void API_JOB_CHECK (){
                 }
                 
               Printing();
+              pre_state= state;
+              }
+              else if(state == "Finishing")
+              {
+              if(pre_state != state){
+                  FadeOut();
+                }
+                
+              Finishing();
               pre_state= state;
               }
             else if(state == "Cancelling")
@@ -172,7 +182,7 @@ void Operational()
 void Printing()
 {
         strip.show();
-        led_calc = (NUM_LEDS*  progress_completion) /100;
+        led_calc = ((end_LED -start_LED)*  progress_completion) /100;
         //Debug Progress
         //Serial.print("Progress: "); 
         //  Serial.println(progress_completion);
@@ -182,15 +192,37 @@ void Printing()
         //  Serial.println(led_calc);
         
         if(led_calc >=1){
-        strip.fill(strip.Color(50,50,50), 0, led_calc);
+        strip.fill(strip.Color(50,50,50), start_LED, led_calc);
         strip.show();
         }
-        else{
+        else{       //Light up first LED
           strip.clear();
-          strip.fill(strip.Color(50,50,50), 0, 1);
+          strip.fill(strip.Color(50,50,50), start_LED, 1);
           strip.show();
           }
+        delay(1000);
 }
+void Finishing()
+{
+          strip.fill(strip.Color(LED_R,LED_G,LED_B), 0, 0);
+          
+        for(LED_G; LED_G >=0; LED_G--){
+          strip.fill(strip.Color(0,LED_G,0), 0, 0);
+          strip.show();
+          Serial.println(LED_G);
+          delay(50);
+          }
+          LED_G = 0;
+          
+        for(LED_G; LED_G<=50; LED_G++){
+          strip.fill(strip.Color(0,LED_G,0), 0, 0);
+          strip.show();
+          Serial.println(LED_G);
+          delay(50);
+          }
+          LED_G = 50;         
+}
+
 void Cancelling(){
           strip.fill(strip.Color(LED_R,LED_G,LED_B), 0, 0);
           
