@@ -1,6 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <ArduinoJson.h>
+#include <ArduinoOTA.h>
 #include <Adafruit_NeoPixel.h>
 #include "WIFI_config.h";
 Adafruit_NeoPixel strip(NUM_LEDS, DATA_PIN, NEO_GRB + NEO_KHZ800); //Configure LED Strip Variable
@@ -29,6 +30,7 @@ void setup() {
         strip.show();
 
       WiFi.mode(WIFI_STA);//Set WiFi mode
+      WiFi.hostname("OctoPi-EspLed");
       WiFi.disconnect();
       delay(100);  
       Serial.print("Connecting to: ");
@@ -52,11 +54,15 @@ void setup() {
           IPAddress ip = WiFi.localIP();//Ip Adresse einer Variable zuweisen
         Serial.println(ip);//Ip Adresse ausgeben
       server.begin();
+
+      ArduinoOTA.setHostname("OctoPi-EspLed");
+      ArduinoOTA.begin();
 }
 void loop() {
 
           API_JOB_CHECK(); 
           WEBSITE();
+          ArduinoOTA.handle();
  
 }
 
