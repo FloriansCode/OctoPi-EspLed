@@ -226,7 +226,7 @@ void Cancelling(){
 void Offline(){
           strip.clear();
           strip.show();
-          delay(1000);
+          delay(10000);
 }
 void FadeOut(){
         for(LED_R, LED_G, LED_B; LED_R>=1,LED_G>=1, LED_B>=1 ; LED_R--,LED_G--,LED_B-- ){
