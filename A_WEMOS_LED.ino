@@ -61,36 +61,11 @@ void setup() {
 void loop() {
 
           API_JOB_CHECK(); 
-          WEBSITE();
           ArduinoOTA.handle();
  
 }
 
-//User Website
-void WEBSITE(){
-  WiFiClient client = server.available();   // Auf Clients (Server-Aufrufe) warten
-  if (client) {                             // Bei einem Aufruf des Servers
-          client.println("HTTP/1.1 200 OK");
-          client.println("Content-type:text/html");
-          client.println("Connection: close");
-          client.println();
-            // Die Webseite anzeigen
-            client.println("<!DOCTYPE html><html>");
-            client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
-            client.println("<meta http-equiv=\"refresh\" content=\"1\">");
-            client.println("<link rel=\"icon\" href=\"data:,\"></head>");
- 
-              client.print("Progress: "); 
-                client.println(progress_completion);
-            client.println("<br>");
-              client.print("Leds: ");
-                client.println(NUM_LEDS);
-            client.println("<br>");
-              client.print("Leds Clac: ");
-                client.println(led_calc);    
-          client.stop();
-  }
-}
+
 
 //http request to get Job Information
 void API_JOB_CHECK (){
@@ -251,6 +226,7 @@ void Cancelling(){
 void Offline(){
           strip.clear();
           strip.show();
+          delay(1000);
 }
 void FadeOut(){
         for(LED_R, LED_G, LED_B; LED_R>=1,LED_G>=1, LED_B>=1 ; LED_R--,LED_G--,LED_B-- ){
