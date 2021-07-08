@@ -70,7 +70,7 @@ void loop() {
 //http request to get Job Information
 void API_JOB_CHECK (){
     HTTPClient http;                        //Preparing the HTTP request.
-      http.begin(octoip_files);             //HTTP link
+      http.begin(client, octoip_files);             //HTTP link
       http.addHeader("X-Api-Key", APIKEY);  //add API KEY
         int httpCode = http.GET();          //Send the request
         String payload = http.getString();  //Get the request response payload
